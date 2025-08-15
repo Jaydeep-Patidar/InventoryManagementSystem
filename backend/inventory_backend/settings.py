@@ -1,11 +1,27 @@
 from pathlib import Path
 import os
+from decouple import config
+
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'dev-secret-key-change-in-prod'
-DEBUG = False
+SECRET_KEY = config('SECRET_KEY', default='fallback-key')
+
+DEBUG = config('DEBUG', default=False, cast=bool)
+
 ALLOWED_HOSTS = ['*']
+
+
+
+
+
+
+
+
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -50,12 +66,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'inventory_backend.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    # Local SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / config('LOCAL_DB_NAME', default='db.sqlite3'),
+        }
     }
-}
+else:
+    # Production PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', default=5432, cast=int),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = []
 
