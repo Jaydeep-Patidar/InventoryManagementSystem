@@ -36,3 +36,23 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
 class SalesOrderViewSet(viewsets.ModelViewSet):
     queryset = SalesOrder.objects.all().order_by('-order_date')
     serializer_class = SalesOrderSerializer
+
+
+
+
+
+# DENGER CODE FOR PRODUCTION
+# views.py
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def create_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="admin@example.com",
+            password="Admin@123"
+        )
+        return HttpResponse("✅ Superuser 'admin' created successfully with password 'Admin@123'")
+    else:
+        return HttpResponse("⚠️ Superuser already exists.")
