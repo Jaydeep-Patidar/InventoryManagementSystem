@@ -6,18 +6,27 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialise environ
-env = environ.Env()
+env = environ.Env(
+    DJANGO_ENV=(str, "local"),
+    DEBUG=(bool, True)
+)
+
+# Read .env file
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))  # load .env file
 
 # Debug & Secret Key
-DEBUG = env.bool("DEBUG", default=False)
+DJANGO_ENV = env("DJANGO_ENV")
+DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY", default="fallback-secret-key")
 
 # Allowed Hosts
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 # CORS
-CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+CORS_ALLOWED_ORIGINS = env.list(
+    "CORS_ALLOWED_ORIGINS",
+    default=["http://localhost:5173", "http://127.0.0.1:5173"]
+)
 
 # Installed apps
 INSTALLED_APPS = [
@@ -67,27 +76,26 @@ TEMPLATES = [
 ]
 
 # Database (Switch based on DEBUG flag)
-if DEBUG:
-    # Local → SQLite
+# =====================
+# DATABASE CONFIG
+# =====================
+if DJANGO_ENV == "local":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-else:
-    # Production → Supabase
+else:  # Production → Supabase PostgreSQL
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': env('DB_NAME'),
-            'USER': env('DB_USER'),
-            'PASSWORD': env('DB_PASSWORD'),
-            'HOST': env('DB_HOST'),
-            'PORT': env('DB_PORT'),
-            'OPTIONS': {
-                'sslmode': 'require',
-            }
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USER"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT"),
+            "OPTIONS": {"sslmode": "require"},
         }
     }
 
