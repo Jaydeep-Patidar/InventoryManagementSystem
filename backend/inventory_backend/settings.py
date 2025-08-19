@@ -19,6 +19,15 @@ DJANGO_ENV = env("DJANGO_ENV")
 DEBUG = env("DEBUG")
 SECRET_KEY = env("SECRET_KEY", default="fallback-secret-key")
 
+# Strict check for DJANGO_ENV
+if DJANGO_ENV not in ["local", "production"]:
+    raise ValueError(
+        f" Invalid DJANGO_ENV='{DJANGO_ENV}'. Allowed values: 'local' or 'production'."
+    )
+
+# Show environment info in console (optional but useful for debugging)
+print(f"Django running in {DJANGO_ENV.upper()} mode | Debug={DEBUG}")
+
 # Allowed Hosts
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
@@ -86,6 +95,7 @@ if DJANGO_ENV == "local":
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+    print("📦 Using SQLite Database")
 else:  # Production → Supabase PostgreSQL
     DATABASES = {
         "default": {
@@ -98,6 +108,7 @@ else:  # Production → Supabase PostgreSQL
             "OPTIONS": {"sslmode": "require"},
         }
     }
+    print("🗄️ Using PostgreSQL (Supabase) Database")
 
 # Password validators (disable for now, enable later if needed)
 AUTH_PASSWORD_VALIDATORS = []
