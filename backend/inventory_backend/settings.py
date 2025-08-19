@@ -80,31 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'inventory_backend.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'InventoryMS_DATABASE',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Jaydeep@2023#',
-#         'HOST': 'db.zfikpshzgvqlscqpwcaw.supabase.co',
-#         'PORT': '5432',
-#         'OPTIONS': {
-#             'sslmode': 'require',  # mandatory for Supabase remote
-#         }
-#     }
-# }
-
-
-
-# if DEBUG:
-#     # Local SQLite
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / config('LOCAL_DB_NAME', default='db.sqlite3'),
-#         }
-#     }
-# else:
     # Production PostgreSQL
 DATABASES = {
     'default': {
