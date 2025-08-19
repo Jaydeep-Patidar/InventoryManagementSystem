@@ -96,29 +96,29 @@ WSGI_APPLICATION = 'inventory_backend.wsgi.application'
 
 
 
-if DEBUG:
-    # Local SQLite
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / config('LOCAL_DB_NAME', default='db.sqlite3'),
-        }
-    }
-else:
+# if DEBUG:
+#     # Local SQLite
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / config('LOCAL_DB_NAME', default='db.sqlite3'),
+#         }
+#     }
+# else:
     # Production PostgreSQL
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            'PORT': config('DB_PORT'),
-            'OPTIONS': {
-                'sslmode': 'require',
-            }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',
         }
     }
+}
 
 AUTH_PASSWORD_VALIDATORS = []
 
