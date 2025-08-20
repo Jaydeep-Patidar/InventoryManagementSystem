@@ -1,10 +1,27 @@
 from django.contrib import admin
 from .models import Category, Supplier, Customer, Product, PurchaseOrder, PurchaseOrderItem, SalesOrder, SalesOrderItem, StockTransaction, StockAdjustment, ReturnRecord
 
-admin.site.register(Category)
-admin.site.register(Supplier)
-admin.site.register(Customer)
-# admin.site.register(Product)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id','name','description')
+    search_fields = ('name',)
+    list_display_links = ('name',)
+
+
+@admin.register(Supplier)
+class SupplierAdmin(admin.ModelAdmin):
+    list_display = ('id','name','contact_info','address','gst_number')
+    search_fields = ('name', 'contact_info', 'address', 'gst_number')
+    list_display_links = ('name',)
+
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('id','name','contact_info','address')
+    search_fields = ('name','contact_info','address')
+    list_display_links = ('name',)
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -13,20 +30,48 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('price', 'cost_price' )
     list_display_links = ('name',)
 
-# admin.site.register(PurchaseOrder)
 @admin.register(PurchaseOrder)
 class PurchaseOrderAdmin(admin.ModelAdmin):
     list_display = ('id','order_number','supplier','order_date','status')
 
-# admin.site.register(PurchaseOrderItem)
 @admin.register(PurchaseOrderItem)
 class PurchaseOrderItemAdmin(admin.ModelAdmin):
     list_display = ('id','product','purchase_order','quantity','cost_price')
     search_fields = ('product', 'purshase_order')
-    list_filter = ('product', 'quantity')
+    list_filter = ('product', 'quantity','purchase_order')
+    list_display_links = ('product',)
 
-admin.site.register(SalesOrder)
-admin.site.register(SalesOrderItem)
-admin.site.register(StockTransaction)
-admin.site.register(StockAdjustment)
-admin.site.register(ReturnRecord)
+@admin.register(SalesOrder)
+class SalesOrderAdmin(admin.ModelAdmin):
+    list_display = ('id','customer','order_number','order_date','payment_status')
+    search_fields = ('customer','order_number','order_date')
+    list_filter = ('order_number','payment_status','order_date')
+    list_display_links = ('customer',)
+
+@admin.register(SalesOrderItem)
+class SalesOrederItemAdmin(admin.ModelAdmin):
+    list_display = ('id','sales_order','product','quantity','selling_price')
+    search_fields = ('sales_order', 'product', 'quantity')
+    list_display_links = ('product',)
+
+@admin.register(StockTransaction)
+class StokeTransactionAdmin(admin.ModelAdmin):
+    list_display = ('id','product','transaction_type','quantity','date','remarks')
+    search_fields = ('product', 'transaction_type','date')
+    list_filter = ('product','transaction_type','date' )
+    list_display_links = ('product',)
+
+@admin.register(StockAdjustment)
+class StockAdjustmentAdmin(admin.ModelAdmin):
+    list_display = ('id','product','adjustment_quantity','reason','date')
+    search_fields = ('product', 'adjustment_qunatity','date')
+    list_filter = ('product', 'adjustment_quantity','date')
+    list_display_links = ('product',)
+                
+@admin.register(ReturnRecord)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id','product','return_type','quantity','reason','date')
+    search_fields = ('product','return_type','date')
+    list_filter = ('product','return_type','date','quantity')
+    list_display_links = ('product',)
+
