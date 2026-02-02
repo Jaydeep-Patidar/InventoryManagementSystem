@@ -135,10 +135,6 @@ curl -X GET http://localhost:8000/api/products/ \
 5. Push to the branch: `git push origin feature/your-feature`
 6. Submit a pull request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Support
 
 For questions or issues, please open an issue on GitHub or contact [jaydeeppatidar2301@gmail.com].
